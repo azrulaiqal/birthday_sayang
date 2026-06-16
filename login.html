@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+        
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #fdfbfb, #ebedee);
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #4a4a4a;
+        }
+        .login-container {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(15px);
+            padding: 40px 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            width: 300px;
+            transition: all 0.3s ease;
+        }
+        .login-container h2 {
+            margin-top: 0;
+            color: #d81b60;
+            font-weight: 600;
+            margin-bottom: 25px;
+        }
+        .input-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        .input-group label {
+            display: block;
+            font-size: 14px;
+            margin-bottom: 5px;
+            color: #666;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+            outline: none;
+            transition: border 0.3s;
+        }
+        .input-group input:focus {
+            border-color: #d81b60;
+        }
+        .login-btn {
+            background: #d81b60;
+            color: white;
+            border: none;
+            padding: 12px;
+            width: 100%;
+            font-size: 16px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+        .login-btn:hover {
+            background: #ad1457;
+        }
+        
+        /* The hidden button that appears at the end */
+        .proceed-btn {
+            display: none;
+            background: #4caf50;
+            color: white;
+            text-decoration: none;
+            padding: 15px 30px;
+            font-size: 16px;
+            border-radius: 30px;
+            font-weight: 600;
+            margin-top: 20px;
+            transition: 0.3s ease;
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+        }
+        .proceed-btn:hover {
+            background: #388e3c;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-container">
+        <h2>Welcome</h2>
+        
+        <form id="loginForm" onsubmit="handleLogin(event)">
+            <div class="input-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" placeholder="Enter username" required>
+            </div>
+            <div class="input-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" placeholder="Enter password" required>
+            </div>
+            <button type="submit" class="login-btn">Login</button>
+        </form>
+
+        <a href="index.html" class="proceed-btn" id="proceedBtn">Enter the Surprise ✨</a>
+    </div>
+
+    <script>
+        let attemptCount = 0;
+
+        function handleLogin(event) {
+            // This prevents the form from actually submitting and refreshing the page
+            event.preventDefault(); 
+            
+            attemptCount++;
+
+            if (attemptCount === 1) {
+                alert("hehe salah sayangg");
+            } else if (attemptCount === 2) {
+                alert("takmo marah marah sayangg birthday girl kannn");
+            } else if (attemptCount === 3) {
+                alert("hehe cuba minta babiey leklokk manja manjaa");
+            } else if (attemptCount >= 4) {
+                alert("hehe dah bolehhh tekan button bawah ni sayangg");
+                
+                // Hide the login form and show the real button
+                document.getElementById('loginForm').style.display = 'none';
+                document.getElementById('proceedBtn').style.display = 'inline-block';
+                
+                // Change the title to fit the new vibe
+                document.querySelector('h2').innerText = "Access Granted 💖";
+            }
+        }
+    </script>
+</body>
+</html>

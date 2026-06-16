@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Question...</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+        
+        body {
+            margin: 0;
+            height: 100vh;
+            background: #fff0f5;
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            overflow: hidden;
+        }
+        .card {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            position: relative;
+            z-index: 10;
+            max-width: 500px;
+            width: 90%;
+        }
+        h2 { color: #d81b60; margin-bottom: 30px; transition: 0.3s; }
+        
+        .btn-group { display: flex; justify-content: center; gap: 20px; }
+        
+        .btn {
+            padding: 12px 35px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 30px;
+            border: none;
+            cursor: pointer;
+            transition: 0.2s;
+            font-family: 'Poppins', sans-serif;
+        }
+        .btn-yes { background: #4caf50; color: white; }
+        .btn-yes:hover { background: #388e3c; }
+        
+        .btn-no { background: #f44336; color: white; position: relative; }
+        
+        #chooseDateBtn {
+            display: none;
+            background: #8e24aa;
+            color: white;
+            margin-top: 20px;
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.4);
+            backdrop-filter: blur(4px);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+        }
+        .calendar-box {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            width: 300px;
+            position: relative;
+        }
+        .close-btn { position: absolute; top: 10px; right: 15px; font-size: 20px; cursor: pointer; color: #888; }
+        .month { font-weight: 600; font-size: 18px; margin-bottom: 15px; color: #333; }
+        .days-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; }
+        .day { padding: 10px 0; border-radius: 5px; background: #f0f0f0; color: #bbb; font-size: 14px; cursor: not-allowed; }
+        .day.target-date { background: #d81b60; color: white; cursor: pointer; font-weight: bold; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+
+        /* Outfit Selection Styles */
+        #outfitSection {
+            display: none;
+            margin-top: 20px;
+            animation: fadeIn 1s ease forwards;
+        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .color-options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .color-btn {
+            padding: 15px;
+            border-radius: 15px;
+            border: 2px solid #eee;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            font-family: 'Poppins', sans-serif;
+        }
+        .color-btn:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .pink-btn { background: #ff4081; color: white; border-color: #ff4081; }
+        .white-btn { background: #ffffff; color: #333; border-color: #ddd; }
+        .discuss-btn { background: #607d8b; color: white; border-color: #607d8b; }
+
+        #finalNextBtn {
+            display: none;
+            background: #d81b60;
+            color: white;
+            text-decoration: none;
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-weight: 600;
+            margin-top: 25px;
+            display: inline-block;
+            opacity: 0;
+            pointer-events: none;
+            transition: 0.5s;
+        }
+        #finalNextBtn.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="card" id="questionCard">
+        <h2 id="mainTitle">Would you like to go on a birthday celebration date? 🌹</h2>
+        
+        <div class="btn-group" id="btnContainer">
+            <button class="btn btn-yes" onclick="clickedYes()">YES!</button>
+            <button class="btn btn-no" id="noBtn">No</button>
+        </div>
+
+        <button class="btn" id="chooseDateBtn" onclick="openCalendar()">Choose a Date 📅</button>
+
+        <div id="outfitSection">
+            <h3 style="color: #4a4a4a; margin-bottom: 10px;">What color should we wear? 👗</h3>
+            <div class="color-options">
+                <button class="color-btn pink-btn" onclick="selectColor('Pink')">Pink 💕</button>
+                <button class="color-btn white-btn" onclick="selectColor('White')">White 🤍</button>
+                <button class="color-btn discuss-btn" onclick="selectColor('Discuss')">Later discuss hahahahahah 😂</button>
+            </div>
+            <a href="page4.html" id="finalNextBtn">See the final surprise ✨</a>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="calendarModal">
+        <div class="calendar-box">
+            <div class="close-btn" onclick="tryClose()">✖</div>
+            <div class="month">June 2026</div>
+            <div class="days-grid">
+                <div class="day">22</div><div class="day">23</div><div class="day">24</div>
+                <div class="day">25</div><div class="day">26</div>
+                <div class="day target-date" onclick="dateSelected()">27</div>
+                <div class="day">28</div>
+            </div>
+            <p style="font-size: 12px; margin-top: 15px; color: #888;">Select an available date</p>
+        </div>
+    </div>
+
+    <audio autoplay loop id="page3-music">
+        <source src="song3.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        // Set volume so it's not too loud
+        document.getElementById('page3-music').volume = 0.5;
+
+        const noBtn = document.getElementById('noBtn');
+
+        const moveButton = () => {
+            const x = Math.random() * (window.innerWidth - noBtn.offsetWidth - 50);
+            const y = Math.random() * (window.innerHeight - noBtn.offsetHeight - 50);
+            noBtn.style.position = 'fixed';
+            noBtn.style.left = `${Math.max(10, x)}px`;
+            noBtn.style.top = `${Math.max(10, y)}px`;
+        };
+
+        noBtn.addEventListener('mouseover', moveButton);
+        noBtn.addEventListener('click', moveButton);
+
+        function clickedYes() {
+            document.getElementById('btnContainer').style.display = 'none';
+            document.getElementById('mainTitle').innerText = "Yay! I knew you'd say Yes! ❤️";
+            document.getElementById('chooseDateBtn').style.display = 'inline-block';
+            noBtn.style.position = 'static'; 
+        }
+
+        function openCalendar() {
+            document.getElementById('calendarModal').style.display = 'flex';
+        }
+
+        function tryClose() {
+            alert("NO, AWAK MESTI PILIH JUGA TARIKH TU");
+        }
+
+        function dateSelected() {
+            document.getElementById('calendarModal').style.display = 'none';
+            document.getElementById('mainTitle').innerText = "It's a Date! See you on 27.06.2026! 🎉";
+            document.getElementById('chooseDateBtn').style.display = 'none';
+            
+            // Show the outfit section
+            document.getElementById('outfitSection').style.display = 'block';
+        }
+
+        function selectColor(choice) {
+            let response = "";
+            if(choice === 'Pink') response = "Pink it is! So cute! 🌸";
+            if(choice === 'White') response = "White! Very elegant! ✨";
+            if(choice === 'Discuss') response = "Hahaha okay we'll figure it out later! 😂";
+            
+            document.getElementById('mainTitle').innerText = response;
+            
+            // Reveal the next button
+            const nextBtn = document.getElementById('finalNextBtn');
+            nextBtn.style.display = 'inline-block';
+            setTimeout(() => nextBtn.classList.add('visible'), 100);
+        }
+    </script>
+</body>
+</html>

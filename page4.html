@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday Sayang</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap');
+
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to bottom, #1a0b2e, #0f0518);
+            height: 100vh;
+            overflow: hidden;
+            font-family: 'Poppins', sans-serif;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Canvas for the rain/sparks effect */
+        #sparkCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .content {
+            z-index: 10;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 40px;
+            border-radius: 20px;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255,255,255,0.1);
+            opacity: 0;
+            animation: fadeInText 3s ease 2s forwards;
+        }
+
+        h1 { margin: 0; font-size: 2.5rem; color: #ff80ab; font-weight: 600; }
+        p { margin-top: 10px; font-weight: 300; font-size: 1.2rem; }
+
+        @keyframes fadeInText {
+            to { opacity: 1; }
+        }
+
+        /* Blooming Flowers Code Generation */
+        .flower-container {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 300px;
+            z-index: 5;
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-end;
+            padding: 0 50px;
+            box-sizing: border-box;
+        }
+
+        .flower {
+            width: 120px;
+            height: 120px;
+            transform: scale(0);
+            transform-origin: bottom center;
+            animation: bloom 4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        @keyframes bloom {
+            to { transform: scale(1); }
+        }
+
+        /* Staggering the bloom timing so they grow slowly one by one */
+        .f1 { animation-delay: 1s; }
+        .f2 { animation-delay: 2.5s; width: 150px; height: 150px; }
+        .f3 { animation-delay: 4s; }
+
+        /* Petal Rotations */
+        .petal { fill: #ff4081; opacity: 0.8; }
+        .center { fill: #ffea00; }
+    </style>
+</head>
+<body>
+
+    <canvas id="sparkCanvas"></canvas>
+
+    <div class="content">
+        <h1>Happy Birthday sayang! 💖</h1>
+        <p>Thank you for being you.<br>I can't wait for our date!</p>
+    </div>
+
+    <div class="flower-container">
+        <svg class="flower f1" viewBox="0 0 100 100">
+            <path class="petal" d="M50,50 C20,10 80,10 50,50" transform="rotate(0 50 50)" />
+            <path class="petal" d="M50,50 C20,10 80,10 50,50" transform="rotate(72 50 50)" />
+            <path class="petal" d="M50,50 C20,10 80,10 50,50" transform="rotate(144 50 50)" />
+            <path class="petal" d="M50,50 C20,10 80,10 50,50" transform="rotate(216 50 50)" />
+            <path class="petal" d="M50,50 C20,10 80,10 50,50" transform="rotate(288 50 50)" />
+            <circle class="center" cx="50" cy="50" r="8"/>
+        </svg>
+
+        <svg class="flower f2" viewBox="0 0 100 100">
+            <path class="petal" d="M50,50 C20,10 80,10 50,50" transform="rotate(0 50 50)" style="fill: #f50057;" />
+            <path class="petal" d="M50,50 C20,10 80,10 50,50" transform="rotate(72 50 50)" style="fill: #f50057;" />
+            <path class="petal" d="M50,50 C20,10 80,10 50,50" transform="rotate(144 50 50)" style="fill: #f50057;" />
+            <path class="petal" d="M50,50 C20,10 80,10 50,50" transform="rotate(216 50 50)" style="fill: #f50057;" />
+            <path class="petal" d="M50,50 C20,10 80,10 50,50" transform="rotate(288 50 50)" style="fill: #f50057;" />
+            <circle class="center" cx="50" cy="50" r="10"/>
+        </svg>
+
+        <svg class="flower f3" viewBox="0 0 100 100">
+            <path class="petal" d="M50,50 C20,10 80,10 50,50" transform="rotate(0 50 50)" />
+            <path class="petal" d="M50,50 C20,10 80,10 50,50" transform="rotate(72 50 50)" />
+            <path class="petal" d="M50,50 C20,10 80,10 50,50" transform="rotate(144 50 50)" />
+            <path class="petal" d="M50,50 C20,10 80,10 50,50" transform="rotate(216 50 50)" />
+            <path class="petal" d="M50,50 C20,10 80,10 50,50" transform="rotate(288 50 50)" />
+            <circle class="center" cx="50" cy="50" r="8"/>
+        </svg>
+    </div>
+
+    <audio autoplay loop id="final-music">
+        <source src="birthday song.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        // 1. Stop the music from the main wrapper so songs don't overlap
+        if (window.parent && window.parent.document.getElementById('bg-music')) {
+            window.parent.document.getElementById('bg-music').pause();
+        }
+
+        // 2. Set the volume for this final song (0.5 is 50%)
+        document.getElementById('final-music').volume = 0.5;
+
+        // JavaScript for the Spark/Rain Effect
+        const canvas = document.getElementById('sparkCanvas');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const sparks = [];
+
+        class Spark {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height * -1; // Start above screen
+                this.size = Math.random() * 2 + 1;
+                this.speedY = Math.random() * 3 + 1; // Falling speed
+                this.opacity = Math.random();
+            }
+            update() {
+                this.y += this.speedY;
+                if (this.y > canvas.height) {
+                    this.y = -10;
+                    this.x = Math.random() * canvas.width;
+                }
+            }
+            draw() {
+                ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        for (let i = 0; i < 150; i++) {
+            sparks.push(new Spark());
+        }
+
+        function animateSparks() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < sparks.length; i++) {
+                sparks[i].update();
+                sparks[i].draw();
+            }
+            requestAnimationFrame(animateSparks);
+        }
+
+        animateSparks();
+
+        // Adjust canvas if window is resized
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+    </script>
+</body>
+</html>
